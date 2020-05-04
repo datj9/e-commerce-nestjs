@@ -29,7 +29,7 @@ export class CategoriesController {
   }
 
   @Post()
-  // @UsePipes(ValidationPipe)
+  @UsePipes(ValidationPipe)
   createCategory(
     @Body() createCategoryDto: CreateCategoryDto,
   ): Promise<Category> {

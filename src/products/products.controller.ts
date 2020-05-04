@@ -6,12 +6,14 @@ import {
   Param,
   ParseIntPipe,
   Query,
-  UsePipes,
   ValidationPipe,
+  Put,
+  UsePipes,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './product.entity';
+import { UpdateProductDto } from './dto/update-product.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -28,9 +30,16 @@ export class ProductsController {
   }
 
   @Post()
-  createProduct(
-    @Body(ValidationPipe) createProductDto: CreateProductDto,
-  ): Promise<Product> {
+  @UsePipes(ValidationPipe)
+  createProduct(@Body() createProductDto: CreateProductDto): Promise<Product> {
     return this.productsService.createProduct(createProductDto);
+  }
+
+  @Put('/:id')
+  updateProduct(
+    @Body() updateProductDto: UpdateProductDto,
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Product> {
+    return this.productsService.updateProduct(updateProductDto, id);
   }
 }
